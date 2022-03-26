@@ -1,6 +1,7 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
+
 const Usuario = require('../models/usuario');
 const usuario = require('../models/usuario');
 
@@ -72,13 +73,17 @@ const usuariosPatch = (req, res = response ) => {
   const usuariosDelete = async (req, res = response ) => {
     const { id } = req.params;
 
+    //const uid = req.uid;
+
     // Fiscamente lo borramos
     //const usuario = await Usuario.findByIdAndDelete( id );
 
     //Baja logica
     const usuario = await Usuario.findByIdAndUpdate( id, {estado:false} );
 
-    res.json(usuario);
+    //const usuarioAutenticado = req.usuario;
+    //res.json({usuario, usuarioAutenticado} );
+    res.json( usuario );
   }
 
   module.exports = {
