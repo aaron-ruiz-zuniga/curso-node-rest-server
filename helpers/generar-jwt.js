@@ -1,4 +1,7 @@
 const  jwt = require('jsonwebtoken');
+const { Usuario } = require('../models');
+
+
 
 //el paquete de jsonwebtoken de npm no regresa una promesa, si no un callback
 //por lo que hay que convertir el callbacka a promesa por medio de un helper
@@ -24,6 +27,33 @@ const generarJWT = ( uid = '' ) => {
 
 }
 
+const comprobarJWT = async ( token = '' ) => {
+
+    try {
+        if ( token.length < 10 ) {
+            return null;
+        }
+
+        const { uid } = jwt.verify( token, process.env.SECRETORPRIVATEKEY );
+        const usuario = await Usuario.findById( uid );
+
+        if (usuario) {
+            if (usuario.estado) {
+                return usuario;    
+            } else {
+                return null;
+            }            
+        }else{
+            return null;
+        }
+
+    } catch (error) {
+        return null;
+    }
+
+}
+
 module.exports = {
-    generarJWT
+    generarJWT,
+    comprobarJWT
 }
